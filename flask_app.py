@@ -56,3 +56,34 @@ def login():
             return render_template('login.html', error=error, form=form)
 
     return render_template('login.html', form=form)
+
+# User Registration
+@app.route('/register', methods=['GET','POST'])
+def register():
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        name = form.name.data
+        phone = form.phone.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+
+        # Create db connection
+        conn = pymysql.connect(host='192.168.99.100', user='root', password='root', db='SchedulerPro', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+
+        # Create cursor
+        a = conn.cursor()
+
+        # Insert Record into users table
+        sql = "INSERT INTO `users` (`name`, `phone`, `password`) VALUES(%s, %s, %s)"
+        a.execute(sql, (name, phone, password))
+
+        # Commit to DB
+        conn.commit()
+
+        # Close connection
+        a.close()
+
+        flash('You are now registered and can login', 'success')
+
+        redirect(url_for('index'))
+        return render_template('register.html', form=form)
+    return render_template('register.html', form=form)
