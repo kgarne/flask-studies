@@ -28,7 +28,7 @@ def login():
         password_candidate = request.form['password']
 
         # Create db connection
-        conn = pymysql.connect(host='singhn15.mysql.pythonanywhere-services.com', user='singhn15', password='Ufg8787Y', db='AuthDB', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(host='192.168.99.100', user='root', password='root', db='SchedulerPro', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
         # Create cursor
         cur = conn.cursor()
 
